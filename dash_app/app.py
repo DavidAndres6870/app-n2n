@@ -142,7 +142,7 @@ app.layout = dbc.Container([
     # Add space after the navigation bar
     html.Div(style={"height": "30px"}),
 
-    html.Div(children='My First App with Data and a Graph'),
+    html.Div(children='Notworking 2 Networking data'),
     #dash_table.DataTable(data=df.to_dict('records'), page_size=10),
     dcc.Graph(figure = fig1),
     dcc.Graph(figure = fig2),
