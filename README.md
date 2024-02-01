@@ -17,13 +17,12 @@ The project was divided in two organization the ETL process from the Eventbrite 
 • Designed and developed interactive dashboards to visualize and analyze attendance data for organizational meetings.
 • Utilized visualization tools and techniques to present insights effectively, aiding decision-making processes within the organization, resulting in a 20% increase in meeting attendance rates.
 
-//### Part 1
-//# EDA Notworking2Networking attendance
+<!-- ### Part 1 -->
+<!--# EDA Notworking2Networking attendance -->
 
-//### Part 2
+<!-- ### Part 2 -->
 
-
-//## Dataset information
+<!-- ## Dataset information -->
 
 ## Project Steps
 
@@ -46,11 +45,14 @@ The project was divided in two organization the ETL process from the Eventbrite 
 After connecting with Eventbrite API with the selected database and update the data after each meeting, the exploration derived in the building of the dasboard. The dashboards display important information about attendance meetings of the organizations through the time, by country,employment status, event mode, and industry. This dashboars allow to the company to organize and planify the number and industries for future meetings.
 
 [Power BI dashboard](http://3.99.181.155:8050/)
+
 [Access the dashboard here](http://3.99.181.155:8050/)
 
 ## Project structure
 The project was divided in two repositories.
+
 [ETL repository](https://github.com/DavidAndres6870/ETL-n2n)
+
 [EDA repository](https://github.com/DavidAndres6870/n2n) (actual)
 
 
