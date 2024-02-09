@@ -66,32 +66,37 @@ filtered_df = df[df['Country of Origin']!='']
 top_6_countries = filtered_df['Country of Origin'].value_counts().nlargest(6)
 top_6_countries_sorted = top_6_countries.sort_values(ascending=True)
 
-fig4 = px.bar(x=top_6_countries_sorted.values, y=top_6_countries_sorted.index, labels={'x': '', 'y': 'Employment Status'})
+fig4 = px.bar(x=top_6_countries_sorted.values, y=top_6_countries_sorted.index, labels={'x': '', 'y': 'Employment Status'}, title='Notworking2Networking attendance by Country')
 
 # Fig component 5 (map)
 
 # Count the number of occurrences of each country in the DataFrame
 country_counts = df['Country of Origin'].value_counts().reset_index()
-country_counts.columns = ['name', 'count']
+country_counts.columns = ['country', 'attendants']
 
 fig5 = px.choropleth(
     country_counts,
-    locations='name',
+    locations='country',
     locationmode='country names',
-    color='count',
-    hover_name='name',
+    color='attendants',
+    hover_name='country',
     color_continuous_scale='Viridis_r',
-    #title='Estimate Smoking Prevalence by Country over the years',
+    #range_color=[0,3000],
+    title='NotWorking2Networking map',
 )
+
 fig5.update_geos(
+    #showcountries =True,
     showcoastlines=True,
     coastlinecolor='RebeccaPurple',
     showland=True,
     landcolor='LightGrey',
     showocean=True,
     oceancolor='LightBlue',
+    fitbounds= 'locations',
     projection_type='orthographic',
 )
+
 fig5.update_layout(
     geo=dict(showframe=False, showcoastlines=False),
     coloraxis_colorbar=dict(title='Attendants by country'),
@@ -106,20 +111,68 @@ attendance_grouped['cumulative_count'] = attendance_grouped.groupby('Attendance'
 attendance_grouped['total_count'] = attendance_grouped['count'].cumsum()
 
 fig6 = px.line(attendance_grouped, x='Date', y= 'total_count', markers=True, title='Attendance Count Over Time')
+fig6.update_layout(yaxis_title='Attendants')
+
+# Fig component61
+toronto_season_attendance = df.loc[df['City']=='Toronto',['Season']]
+toronto_season_attendance = toronto_season_attendance.groupby('Season').size().reset_index(name='Attendance')
+
+fig61 = px.bar(toronto_season_attendance,x="Season", y="Attendance")
+fig61.update_xaxes(tickmode='linear', dtick=1)
+
+# Fig component62
+montreal_season_attendance = df.loc[df['City']=='Montreal',['Season']]
+montreal_season_attendance = montreal_season_attendance.groupby('Season').size().reset_index(name='Attendance')
+
+fig62 = px.bar(montreal_season_attendance,x="Season", y="Attendance")
+fig62.update_xaxes(tickmode='linear', dtick=1)
 
 # Fig component 7
 filtered_df = df[(df['Industry / Event']!='Workshop: LinkedIn Workshop to Advance Your Career') &
                  (df['Industry / Event']!='Workshop: Insider Secrets to Landing Ideal Jobs (for Newcomers)') &
                  (df['Industry / Event']!='Workshop: Secrets to Crafting The Perfect Job Application by Izzy Piyale-Sheard') &
                  (df['Industry / Event']!='Workshop: Top 22 Tips to Get a Job in 2022') &
-                 (df['Industry / Event']!='Workshop: How to Write Business English (for Newcomers)') ]
-#top_9_industry = filtered_df[['Industry / Event','Format']].value_counts().nlargest(20).to_frame().reset_index()
+                 (df['Industry / Event']!='Workshop: How to Write Business English (for Newcomers)') &
+                 (df['Industry / Event']!='End of Season Online Meetup') &
+                 (df['Industry / Event']!='S8 Party') &
+                 (df['Industry / Event']!='End of Season In Person Meetup') &
+                 (df['Industry / Event']!='S7 Party') &
+                 (df['Industry / Event']!='Volunteer Training')]
+#top_9_industry = filtered_df[['Industry / Event','Format']].value_counts().nlargest(9).to_frame().reset_index()
 industry = filtered_df[['Industry / Event','Format']].value_counts().to_frame().reset_index()
 
 fig7 = px.bar(industry,x='Industry / Event', y='count',color='Format', barmode='group',labels={'x': 'Industry / Event', 'y': 'Format'})
+fig7.update_layout(yaxis_title='Total Attendance')
 
 # Fig component 8
-fig8 = px.histogram(filtered_df,x='Industry / Event',color='Format',  barmode='group')
+df_attendees = df[['#','Industry / Event', 'Format', 'Attendance']]
+df_attendees = df_attendees[['#', 'Industry / Event','Format']].value_counts().sort_index().reset_index(name='Attendants')
+
+df_average_attendees = df_attendees.groupby(['Industry / Event', 'Format']).agg({'Attendants': ['sum', 'count']}).reset_index()
+df_average_attendees.columns = ['Industry / Event', 'Format', 'Sum_Count', 'Attendants']
+
+df_average_attendees['Average']= df_average_attendees['Sum_Count']/df_average_attendees['Attendants']
+
+filtered_df2 = df_average_attendees[(df_average_attendees['Industry / Event']!='Workshop: LinkedIn Workshop to Advance Your Career') &
+                                    (df_average_attendees['Industry / Event']!='Workshop: Insider Secrets to Landing Ideal Jobs (for Newcomers)') &
+                                    (df_average_attendees['Industry / Event']!='Workshop: Secrets to Crafting The Perfect Job Application by Izzy Piyale-Sheard') &
+                                    (df_average_attendees['Industry / Event']!='Workshop: Top 22 Tips to Get a Job in 2022') &
+                                    (df_average_attendees['Industry / Event']!='Workshop: How to Write Business English (for Newcomers)') &
+                                    (df_average_attendees['Industry / Event']!='End of Season Online Meetup') &
+                                    (df_average_attendees['Industry / Event']!='S8 Party') &
+                                    (df_average_attendees['Industry / Event']!='End of Season In Person Meetup') &
+                                    (df_average_attendees['Industry / Event']!='S7 Party') &
+                                    (df_average_attendees['Industry / Event']!='Volunteer Training')]
+
+#top_average = filtered_df2[['Industry / Event','Format']].value_counts().nlargest(9).to_frame().reset_index()
+top_average = filtered_df2[['Industry / Event','Format','Average']].value_counts().to_frame().reset_index()
+
+top_average =top_average.sort_values('Average',ascending=False)
+
+fig8 = px.histogram(top_average,x='Industry / Event', y = 'Average',color='Format',  barmode='group')
+fig8.update_layout(yaxis_title='Average')
+
+#fig8 = px.histogram(top_average,x='Industry / Event',color='Format',  barmode='group')
 
 # Initialize the app
 #app = Dash(__name__)
@@ -139,7 +192,7 @@ app.layout = dbc.Container([
     # Navigation bar
     navbar,
 
-    # Add space after the navigation bar
+    # Add space after the navigation bard
     html.Div(style={"height": "30px"}),
 
     html.Div(children='Notworking 2 Networking data'),
@@ -150,6 +203,8 @@ app.layout = dbc.Container([
     dcc.Graph(figure = fig4),
     dcc.Graph(figure = fig5),
     dcc.Graph(figure = fig6),
+    dcc.Graph(figure = fig61),
+    #dcc.Graph(figure = fig62),
     dcc.Graph(figure = fig7),
     dcc.Graph(figure = fig8),
     ])
@@ -162,7 +217,7 @@ app.layout = dbc.Container([
 
 # Run the app
 if __name__ == '__main__':
-    #app.run(debug=True)
+    app.run(debug=False)
     app.run_server(host="0.0.0.0", port="8050")
 
 #port 8050
