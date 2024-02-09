@@ -34,7 +34,7 @@ The project was divided in two organization the ETL process from the Eventbrite 
 
 4. Retrieve and preprocess Data: Develop an ETL using the Eventbrite API to fetch the required data based on the analysis goals, and host the data of the organization in a database. This is done using different python libraries and multiple free AWS servicess (lambda, CloudWatch, S3, ECR), to update the data after each meeting.
 
-5. Analyze the Data: Utilize data science techniques and libraries such as pandas, stats to perform exploratory data analysis [(EDA)](https://github.com/DavidAndres6870/n2n/blob/main/EDA.ipynb), statistical analysis and visualizations. Extract meaningful insights and identify patterns or correlations in the data. Select the appropriate visualization tool like Matplotlib, Seaborn, Plotly and Power BI to create interactive and informative visualizations.
+5. Analyze the Data: Utilize data science techniques and libraries such as pandas, stats to perform exploratory data analysis [(EDA)](https://github.com/DavidAndres6870/app-n2n/blob/main/EDA.ipynb), statistical analysis and visualizations. Extract meaningful insights and identify patterns or correlations in the data. Select the appropriate visualization tool like Matplotlib, Seaborn, Plotly and Power BI to create interactive and informative visualizations.
 
 6. Design the applications/Dashboards: Design the user interface and layout of the dashboard using Dash library and Power BI. Create Create an intuitive and user-friendly dashboard that allows users to interact with the visualizations, apply filters, and explore the data dynamically. Iterate on the design and make improvements based on user input and additional data analysis requirements
 
